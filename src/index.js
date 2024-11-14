@@ -5,12 +5,18 @@ import App from './App';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 import NotFound from './routes/NotFound';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import AuthCheck from './components/AuthCheck';
+import SignUp from './routes/SignUp';
+import Login from './routes/Login';
 
 // 라우터
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Outlet />, // 자식 컴포넌트들이 "/" 경로에서 <Outlet /> 자리에 렌더링 됨
+    element:
+      <AuthCheck>
+        <Outlet /> {/* 자식 컴포넌트들이 "/" 경로에서 <Outlet /> 자리에 렌더링 됨 */}
+      </AuthCheck>,
     errorElement: <NotFound />,
     children: [
       {
@@ -18,11 +24,21 @@ const router = createBrowserRouter([
         element: <App />
       }
     ]
+  },
+  {
+    path: "login",
+    element:
+        <Login />
+  },
+  {
+    path: "signup",
+    element:
+        <SignUp />
   }
 ]);
 
 // QueryClient 인스턴스 생성
-const queryClient = new QueryClient(); 
+const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
