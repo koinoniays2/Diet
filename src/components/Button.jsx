@@ -1,5 +1,9 @@
-export default function Button() {
+export default function Button({ color, text }) {
     return (
-        <div>Button</div>
+        <button className={`${color} btn-custom`}>
+            <div className="btn-border-custom">
+                {text}
+            </div>
+        </button>
     )
 }

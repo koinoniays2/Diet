@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import AuthCheck from './components/AuthCheck';
 import SignUp from './routes/SignUp';
 import Login from './routes/Login';
+import GuestOnly from './components/GuestOnly';
 
 // 라우터
 const router = createBrowserRouter([
@@ -28,12 +29,16 @@ const router = createBrowserRouter([
   {
     path: "login",
     element:
+      <GuestOnly>
         <Login />
+      </GuestOnly>
   },
   {
     path: "signup",
     element:
+      <GuestOnly>
         <SignUp />
+      </GuestOnly>
   }
 ]);
 
