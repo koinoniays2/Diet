@@ -9,6 +9,21 @@ export async function apiGetLoginStatus() {
         }).then((res) => res.json());
     }catch(error) {
         console.log(error);
-    }
+    };
 };// 매핑된 세션 ID가 없으면 서버에서 null 또는 비로그인 상태를 나타내는 응답을 보내기 때문에, 로그인되지 않았음을 의미
 
+// 로그인
+export async function apiPostUserLogin(data) {
+    try {
+        return await fetch (`${BASE_URL}/user/login`, {
+            method:  "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include", // 로그인 시 받는 쿠키 포함하기
+            body: JSON.stringify(data)
+        }).then(res => res.json());
+    }catch(error) {
+        console.log(error);
+    };
+};

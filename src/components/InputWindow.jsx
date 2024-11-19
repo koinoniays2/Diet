@@ -1,4 +1,4 @@
-export default function InputWindow({ children }) {
+export default function InputWindow({ children, handleSubmit, onValid, data }) {
     return (
         <section className="w-full h-screen p-4 flex justify-center items-center">
             <div className="w-full max-w-80 min-w-80 border-black border rounded-xl
@@ -7,7 +7,8 @@ export default function InputWindow({ children }) {
                     Diet
                 </div>
                 <div className="w-full p-5">
-                    <form className="flex flex-col gap-12">
+                    {/* 전달받은 props - handleSubmit, onValid */}
+                    <form onSubmit={handleSubmit(onValid)} className="flex flex-col gap-12">
                         { children }
                     </form>
                 </div>
