@@ -3,14 +3,14 @@ import Button from "../components/Button";
 import Input from "../components/Input";
 import InputWindow from "../components/InputWindow";
 import { useMutation } from "react-query";
-import { apiPostUserLogin } from "../api";
+import { apiPostLogin } from "../api";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
     const [userData, setUserData] = useState(null); // API 요청 결과값을 담기 위해
     const navigate = useNavigate();
-    const { mutate } = useMutation(apiPostUserLogin, {
+    const { mutate } = useMutation(apiPostLogin, {
         onSuccess: (data) => {
             setUserData(data);
         }
