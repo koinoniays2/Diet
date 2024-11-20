@@ -1,6 +1,8 @@
-export default function Button({ color, text }) {
+export default function Button({ type, color, text, onClick }) {
     return (
-        <button className={`${color} btn-custom`}>
+        <button type={type} className={`${color} btn-custom`} {...(onClick && { onClick })}>
+            {/* onClick이 있으면 { onClick: onClick } 객체 생성
+            ...는 객체의 키-값을 JSX 태그의 속성으로 변환(Reart JSX 고유 기능) */}
             <div className="btn-border-custom">
                 {text}
             </div>

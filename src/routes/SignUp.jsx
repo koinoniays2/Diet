@@ -1,5 +1,10 @@
+import InputWindow from "../components/InputWindow";
+import Layout from "../components/Layout";
+
 export default function SignUp() {
     return (
-        <div>SignUp</div>
+        <Layout>
+            SignUp
+        </Layout>
     )
 }
