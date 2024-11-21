@@ -30,7 +30,7 @@ export async function apiPostLogin(data) {
 // 회원가입
 export async function apiPostCreateUser(data) {
     try {
-        return await fetch (`${BASE_URL}/user/createUser`, {
+        return await fetch (`${BASE_URL}/user/create`, {
             method:  "POST",
             headers: {
                 "Content-Type": "application/json"

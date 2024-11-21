@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import InputWindow from "../components/InputWindow";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { apiPostLogin } from "../api";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -10,9 +10,14 @@ import { useNavigate } from "react-router-dom";
 export default function Login() {
     const [userData, setUserData] = useState(null); // API 요청 결과값을 담기 위해
     const navigate = useNavigate();
+    const queryClient = useQueryClient(); 
+    // react-query 훅 
+
     const { mutate } = useMutation(apiPostLogin, {
         onSuccess: (data) => {
+            queryClient.invalidateQueries("getSession"); // invalidateQueries(key): 쿼리 무효화 후 데이터 다시 가져오기
             setUserData(data);
+            // console.log(data);
         }
     });
     const { register, handleSubmit } = useForm();
@@ -36,7 +41,7 @@ export default function Login() {
             {/* props로 handleSubmit과 onValid 전달(form 제출) */}
             {/* 인풋 */}
             <div className="w-full flex flex-col gap-4">
-                <Input type="text" placeholder="아이디" register={register} name="id" inputChange={inputChange}/>
+                <Input type="text" placeholder="아이디" register={register} name="id" inputChange={inputChange} />
                 <Input type="password" placeholder="비밀번호" register={register} name="password" inputChange={inputChange}/>
                 {/* props로 register와 register안에 들어갈 키 전달  */}
                 {/* 오류 메세지 */}
