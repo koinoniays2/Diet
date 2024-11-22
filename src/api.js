@@ -20,7 +20,7 @@ export async function apiPostLogin(data) {
             headers: {
                 "Content-Type": "application/json"
             },
-            credentials: "include", // 로그인 시 받는 쿠키 포함하기
+            credentials: "include", // 헤더에 쿠키를 포함하여 서버로 전송
             body: JSON.stringify(data)
         }).then(res => res.json());
     }catch(error) {

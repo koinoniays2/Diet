@@ -9,12 +9,13 @@ import checkTrue from "../assets/check_true.svg";
 import checkFalse from "../assets/check_false.svg";
 
 export default function SignUp() {
-    const [serverError, setServerError] = useState(null);
+    const [serverMessage, setServerMessage] = useState(null);
+    // const [userData, setUserData] = useState(null);
     const [isChecked, setIsChecked] = useState(false);
 
     const { mutate } = useMutation(apiPostCreateUser, {
         onSuccess: (data) => {
-            setServerError(data.message);
+            setServerMessage(data.message);
         }
     });
     const { register, handleSubmit, formState: { errors }  } = useForm({
@@ -24,7 +25,7 @@ export default function SignUp() {
         mutate(data);
     };
     const inputChange = () => {
-        setServerError(null);
+        setServerMessage(null);
     };
     const checkChange = (event) => {
         setIsChecked(event.target.checked);
@@ -63,8 +64,8 @@ export default function SignUp() {
             <div className="flex flex-col gap-2">
                 {/* 오류 메세지 */}
                 {
-                    serverError && (
-                        <p className="text-red-500">{serverError}</p>
+                    serverMessage && (
+                        <p className="text-red-500">{serverMessage}</p>
                     )
                 }
                 <Button disable={!isChecked} type="submit" color={isChecked ? "btn-color-pink" : "btn-color-gray"} text="회원가입" />
