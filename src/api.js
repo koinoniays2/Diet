@@ -1,16 +1,21 @@
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 // 로그인 여부 확인
+/* 클라이언트와 서버가 다른 도메인(포트 포함)일 경우
+모든 요청에 대해 credentials: "include"를 설정해야 쿠키가 제대로 작동
+*/
 export async function apiGetLoginStatus() {
     try{
         return await fetch(`${BASE_URL}/user/login-status`, {
             method: "GET",
-            credentials: "include" // 브라우저에 저장된 세션 ID 쿠키가 서버에 포함되어 전송
+            credentials: "include"
         }).then((res) => res.json());
     }catch(error) {
         console.log(error);
     };
-};// 매핑된 세션 ID가 없으면 서버에서 null 또는 비로그인 상태를 나타내는 응답을 보내기 때문에, 로그인되지 않았음을 의미
+};
+/* 세션 ID가 없으면 서버에서 result : false, user : null 응답을 보내기 때문에, 
+로그인되지 않았음을 알 수 있음 */
 
 // 로그인
 export async function apiPostLogin(data) {
