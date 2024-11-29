@@ -46,7 +46,7 @@ export default function Login() {
         <InputWindow handleSubmit={handleSubmit} onValid={onValid}>
             {/* props로 handleSubmit과 onValid 전달(form 제출) */}
             {/* 인풋 */}
-            <div className="w-full flex flex-col gap-4">
+            <div className="w-full flex flex-col">
                 <Input type="text" placeholder="아이디" register={register} name="id" inputChange={inputChange} />
                 <Input type="password" placeholder="비밀번호" register={register} name="password" inputChange={inputChange}/>
                 {/* props로 register와 register안에 들어갈 키 전달  */}
