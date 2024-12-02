@@ -9,13 +9,14 @@ export default function Input({
     register, 
     errors,
     validate,
-    inputChange }) {
+    inputChange,
+    serverChange,
+    required }) {
     return (
         <div className="flex flex-col">
             <label className="border-black border-2 mt-2 flex">
-                {/* 부모에게 전달받은 register 함수와 register에 들어갈 키 사용 */}
                 <input {...register(`${name}`, {
-                        // required : `필수 입력 사항입니다.`,
+                        required : required,
                         pattern : {
                             value : regexp,
                             message : message
@@ -24,12 +25,13 @@ export default function Input({
                 })} className="input-custom" type={type} placeholder={placeholder}
                 onChange={(e) => {
                     register(name).onChange(e); // React Hook Form 기본 동작
-                    if (inputChange) inputChange(); // 부모 컴포넌트의 검증 함수
+                    if (inputChange) inputChange(); // 휴대폰, 이메일 검증
+                    if (serverChange) serverChange(); // 서버 메세지 초기화
                 }} />
             </label>
-            <span className="text-red-500 text-[13px]">
+            <p className="text-red-500 text-[13px]">
                 { errors?.[name] && errors[name].message }
-            </span>
+            </p>
         </div>
     )
 }

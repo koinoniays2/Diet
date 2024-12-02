@@ -1,7 +1,8 @@
-export default function Layout({ children }) {
+import React from 'react'
+
+export default function Layout() {
     return (
-        <section className="w-full h-screen p-4 flex justify-center items-center">
-            {children}
-        </section>
+        <div>Layout</div>
     )
 }
+

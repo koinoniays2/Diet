@@ -8,24 +8,20 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-    // API 요청 결과값을 담기
-    // const [userData, setUserData] = useState(null);
-    // 서버 메세지 담기
-    const [serverMessage, setServerMessage] = useState(null);
-    // 인풋에 입력값이 들어오면 오류메세지 초기화
-    const inputChange = () => {
-        setServerMessage(null);
+    // const [userData, setUserData] = useState(null); // API 요청 결과값
+    const [serverMessage, setServerMessage] = useState(null); // 서버 메세지
+    const serverChange = () => {
+        setServerMessage(null); // 인풋에 입력값이 들어오면 서버 메세지 초기화
     };
     const navigate = useNavigate();
-    const queryClient = useQueryClient(); 
-    // react-query 훅 
+    const queryClient = useQueryClient();  // react query 라이브러리 useQueryClient 훅
+    
 
     const { mutate } = useMutation(apiPostLogin, {
         onSuccess: (data) => {
             // invalidateQueries(key): 쿼리 무효화 후 데이터 다시 가져오기
             queryClient.invalidateQueries("getSession"); 
             setServerMessage(data.message);
-            // console.log(data);
         }
     });
     const { register, handleSubmit } = useForm();
@@ -41,19 +37,23 @@ export default function Login() {
     };
     /* handleSubmit에서 유효성 검사를 통과한 데이터를 처리하기 위해 실행되는 콜백 함수
     콜백 함수 : 다른 함수의 매개변수로 전달되어, 특정 시점에 실행되는 함수.*/
+
+    const inputs = [
+        { name: "id", placeholder: "아이디" },
+        { type: "password", name: "password", placeholder: "비밀번호" }
+    ];
     
     return (
         <InputWindow handleSubmit={handleSubmit} onValid={onValid}>
-            {/* props로 handleSubmit과 onValid 전달(form 제출) */}
             {/* 인풋 */}
             <div className="w-full flex flex-col">
-                <Input type="text" placeholder="아이디" register={register} name="id" inputChange={inputChange} />
-                <Input type="password" placeholder="비밀번호" register={register} name="password" inputChange={inputChange}/>
-                {/* props로 register와 register안에 들어갈 키 전달  */}
-                {/* 오류 메세지 */}
+                {inputs.map((input, index) => (
+                        <Input key={index} {...input} register={register} serverChange={serverChange} required="필수 입력사항 입니다." />
+                    ))}
+                {/* 서버 메세지 */}
                 {
                     serverMessage && (
-                        <p className="text-red-500">{serverMessage}</p>
+                        <p className="text-red-500 text-[13px]">{serverMessage}</p>
                     )
                 }
             </div>
