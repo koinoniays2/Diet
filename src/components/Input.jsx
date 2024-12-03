@@ -22,7 +22,7 @@ export default function Input({
                             message : message
                         },
                         validate : validate
-                })} className="input-custom" type={type} placeholder={placeholder}
+                })} className="input-custom border-custom-2" type={type} placeholder={placeholder}
                 onChange={(e) => {
                     register(name).onChange(e); // React Hook Form 기본 동작
                     if (inputChange) inputChange(); // 휴대폰, 이메일 검증

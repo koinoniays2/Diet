@@ -7,6 +7,27 @@
     .bg-color-hotpink {
         @apply bg-[#DD549A]
     }
+    .bg-color-red {
+        @apply bg-[#FFD8D8]
+    }
+    .bg-color-orange {
+        @apply bg-[#FFDEA9]
+    }
+    .bg-color-yellow {
+        @apply bg-[#FAF4C0]
+    }
+    .bg-color-green {
+        @apply bg-[#CEFBC9]
+    }
+    .bg-color-blue {
+        @apply bg-[#D9E5FF]
+    }
+    .bg-color-purple {
+        @apply bg-[#E8D9FF]
+    }
+    .bg-color-black {
+        @apply bg-[#D5D5D5]
+    }
     /* btn */
     .btn-color-pink {
         @apply bg-[#ED8EE0]
@@ -17,14 +38,16 @@
     .btn-custom {
         @apply w-full border-black border-2
     }
-    .btn-border-custom {
+    /* border */
+    .border-custom-1 {
         @apply border-l-white border-t-white border-r-[#9E9E9E] border-b-[#9E9E9E] border-4
+    }
+    .border-custom-2 {
+        @apply border-l-[#9E9E9E] border-t-[#9E9E9E] border-b-white border-r-white border-4
     }
     /* input */
     .input-custom {
-        @apply p-0.5 w-full
-        border-l-[#9E9E9E] border-t-[#9E9E9E] border-b-white border-r-white border-4
-        focus:outline-none
+        @apply p-0.5 w-full focus:outline-none
     }
 }
 
