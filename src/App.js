@@ -9,7 +9,6 @@ import Cookies from "js-cookie";
 function App() {
   const [baseColor, setBaseColor] = useState("bg-color-red"); // 배경 색
   const [folderIconColor, setFolderIconColor] = useState(Red); // 폴더 색
-
   const [activeMenu, setActiveMenu] = useState(null); // 현재 활성화된 메뉴 인덱스
 
   // 색상 쿠키에서 읽어오기
@@ -32,7 +31,6 @@ function App() {
   useEffect(() => {
     // window에 클릭 이벤트 추가
     window.addEventListener("click", outsideClick);
-
     // 컴포넌트 언마운트 시 이벤트 리스너 제거
     return () => {
       window.removeEventListener("click", outsideClick);
@@ -69,9 +67,11 @@ function App() {
               {
                 menus.map((item) => (
                   item.menu.map((menu, index) => (
-                    <FooterMenu key={index} index={index} activeMenu={activeMenu} divCSS={activeMenu === index ? "border-custom-2" : "border-custom-1"} src={menu.src} alt={menu.alt} imgCSS={`${menu.className}`}
-                      span={menu.span} onClick={() => menuClick(index)} menuIndex={activeMenu}
-                      setBaseColor={setBaseColor} setFolderIconColor={setFolderIconColor} />
+                    <FooterMenu key={index} index={index} activeMenu={activeMenu} // index와 현재 클릭 된 메뉴 전달
+                    divCSS={activeMenu === index ? "border-custom-2" : "border-custom-1"} // 클릭된 메뉴와 인덱스가 같은지 확인
+                    src={menu.src} alt={menu.alt} imgCSS={`${menu.className}`} span={menu.span} // 메뉴 데이터
+                    onClick={() => menuClick(index)} // 클릭 시 해당 메뉴 인덱스 저장
+                    setBaseColor={setBaseColor} setFolderIconColor={setFolderIconColor} /> // 배경 컬러, 폴더 아이콘 컬러
                   ))
                 ))
               }

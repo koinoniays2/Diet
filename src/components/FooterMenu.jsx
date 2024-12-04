@@ -10,11 +10,12 @@ import Cookies from "js-cookie";
 
 
 export default function FooterMenu({ index, activeMenu,
-    divCSS, src, alt, imgCSS, span, onClick,
+    divCSS, src, alt, imgCSS, span, 
+    onClick,
     setBaseColor, setFolderIconColor }) {
     const ICON_CONTAINER = `flex-1 flex flex-col items-center justify-center py-2 cursor-pointer`;
 
-    // 컬러 설정
+    // 설정 메뉴 데이터
     const menus = [
         {
             color: [
@@ -31,14 +32,14 @@ export default function FooterMenu({ index, activeMenu,
 
     const ConfigMenuClick = (index) => {
         menus.map((item) => {
-            item.color.map((color, colorIndex) => {
-                if(index === colorIndex) {
-                    setBaseColor(color.setBaseColor); // 배경색
-                    setFolderIconColor(color.setFolderIconColor); // 폴더색
+            item.color.map((menu, menuIndex) => {
+                if(index === menuIndex) {
+                    setBaseColor(menu.setBaseColor); // 배경색
+                    setFolderIconColor(menu.setFolderIconColor); // 폴더색
 
-                    // 쿠키에 저장 js-cookie
-                    Cookies.set("baseColor", color.setBaseColor);
-                    Cookies.set("folderIconColor", color.setFolderIconColor);
+                    // 변경 컬러 쿠키에 저장 js-cookie
+                    Cookies.set("baseColor", menu.setBaseColor);
+                    Cookies.set("folderIconColor", menu.setFolderIconColor);
 
                 }
             })
@@ -46,7 +47,7 @@ export default function FooterMenu({ index, activeMenu,
     };
     return (
         <li className={`${ICON_CONTAINER} ${divCSS} relative`} onClick={onClick}>
-            {/* 환경설정 클릭 시 나오는 메뉴 / index가 2인 FooterMenu 메뉴에만 렌더링*/}
+            {/* 환경설정 클릭 시 나오는 메뉴 / index가 2인 FooterMenu 메뉴에서만 렌더링*/}
             {index === 2 && activeMenu === index && (
                 <ul className="absolute bottom-full right-0 w-full border-custom-1 px-1 z-10">
                     {   // 메뉴 추가
