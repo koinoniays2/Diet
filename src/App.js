@@ -1,18 +1,28 @@
 import { useEffect, useRef, useState } from "react";
-import red from "./assets/close_folder_red.svg";
+import Red from "./assets/close_folder_red.svg";
 import xIcon from "./assets/xicon.svg";
 import setting from "./assets/setting.svg";
 import FooterMenu from "./components/FooterMenu";
+import Cookies from "js-cookie";
 
 
 function App() {
   const [baseColor, setBaseColor] = useState("bg-color-red"); // 배경 색
-  const [folderIconColor, setFolderIconColor] = useState(red); // 폴더 색
+  const [folderIconColor, setFolderIconColor] = useState(Red); // 폴더 색
 
   const [activeMenu, setActiveMenu] = useState(null); // 현재 활성화된 메뉴 인덱스
-  
+
+  // 색상 쿠키에서 읽어오기
+  useEffect(() => {
+    const savedBaseColor = Cookies.get("baseColor");
+    const savedFolderIconColor = Cookies.get("folderIconColor");
+
+    if (savedBaseColor) setBaseColor(savedBaseColor);
+    if (savedFolderIconColor) setFolderIconColor(savedFolderIconColor);
+  }, []);
+
   // 메뉴 영역 감지용 ref
-  const menuRef = useRef(null); 
+  const menuRef = useRef(null);
   // 메뉴 바깥을 클릭하면 모든 상태 초기화
   const outsideClick = (event) => {
     if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -32,7 +42,7 @@ function App() {
   // 메뉴 데이터
   const menus = [
     {
-      menu : [
+      menu: [
         { src: folderIconColor, alt: "폴더", className: "h-10", span: "새폴더" },
         { src: xIcon, alt: "폴더삭제", className: "h-11", span: "폴더삭제" },
         { src: setting, alt: "환경설정", className: "h-11", span: "환경설정" }
@@ -46,19 +56,27 @@ function App() {
   };
 
   return (
-    <main className={`${baseColor} min-h-screen flex items-center justify-center`}>
-      <section className="h-full min-w-[360px] max-w-[480px]">
+    <main className={`${baseColor} flex items-center justify-center`}>
+      <section className="w-full max-w-[480px]">
+        <div className="min-h-[calc(100vh-93px)]">
+
+        </div>
         {/* 메뉴 */}
         <footer ref={menuRef} // ref : 메뉴 영역 감지
-        className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full min-w-[360px] max-w-[480px] flex">
-          {
-            menus.map((item) => (
-              item.menu.map((menu, index) => (
-                <FooterMenu key={index} divCSS={activeMenu === index ? "border-custom-2" : "border-custom-1"} src={menu.src} alt={menu.alt} imgCSS={`${menu.className}`}
-                span={menu.span} onClick={() => menuClick(index)} />
-              ))
-            ))
-          }
+          className="sticky bottom-0">
+          <nav>
+            <ul className="flex">
+              {
+                menus.map((item) => (
+                  item.menu.map((menu, index) => (
+                    <FooterMenu key={index} index={index} activeMenu={activeMenu} divCSS={activeMenu === index ? "border-custom-2" : "border-custom-1"} src={menu.src} alt={menu.alt} imgCSS={`${menu.className}`}
+                      span={menu.span} onClick={() => menuClick(index)} menuIndex={activeMenu}
+                      setBaseColor={setBaseColor} setFolderIconColor={setFolderIconColor} />
+                  ))
+                ))
+              }
+            </ul>
+          </nav>
         </footer>
       </section>
     </main>
