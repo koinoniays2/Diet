@@ -1,12 +1,6 @@
 import ConfigMenu from "./ConfigMenu";
-import Red from "../assets/close_folder_red.svg";
-import Orange from "../assets/close_folder_orange.svg";
-import Yellow from "../assets/close_folder_yellow.svg";
-import Green from "../assets/close_folder_green.svg";
-import Blue from "../assets/close_folder_blue.svg";
-import Purple from "../assets/close_folder_purple.svg";
-import Black from "../assets/close_folder_gray.svg";
 import Cookies from "js-cookie";
+import { getBaseColor, getFolderColor } from "../lib/SettingColor";
 
 
 export default function FooterMenu({ index, activeMenu,
@@ -19,27 +13,27 @@ export default function FooterMenu({ index, activeMenu,
     const menus = [
         {
             color: [
-                { color: "bg-[#FFA7A7]", colorName: "Red", setFolderIconColor: Red, setBaseColor: "bg-color-red" },
-                { color: "bg-[#FFC19E]", colorName: "Orange", setFolderIconColor: Orange, setBaseColor: "bg-color-orange" },
-                { color: "bg-[#F2CB61]", colorName: "Yellow", setFolderIconColor: Yellow, setBaseColor: "bg-color-yellow" },
-                { color: "bg-[#86E57F]", colorName: "Green", setFolderIconColor: Green, setBaseColor: "bg-color-green" },
-                { color: "bg-[#6799FF]", colorName: "Blue", setFolderIconColor: Blue, setBaseColor: "bg-color-blue" },
-                { color: "bg-[#A566FF]", colorName: "Purple", setFolderIconColor: Purple, setBaseColor: "bg-color-purple" },
-                { color: "bg-[#5D5D5D]", colorName: "Black", setFolderIconColor: Black, setBaseColor: "bg-color-black" }
+                { color: "bg-[#FFA7A7]", colorName: "Red" },
+                { color: "bg-[#FFC19E]", colorName: "Orange" },
+                { color: "bg-[#F2CB61]", colorName: "Yellow" },
+                { color: "bg-[#86E57F]", colorName: "Green" },
+                { color: "bg-[#6799FF]", colorName: "Blue" },
+                { color: "bg-[#A566FF]", colorName: "Purple" },
+                { color: "bg-[#5D5D5D]", colorName: "Black" }
             ]
         }
     ]
 
+    // 쿠키 저장
     const ConfigMenuClick = (index) => {
         menus.map((item) => {
-            item.color.map((menu, menuIndex) => {
+            item.color.map((_, menuIndex) => {
                 if(index === menuIndex) {
-                    setBaseColor(menu.setBaseColor); // 배경색
-                    setFolderIconColor(menu.setFolderIconColor); // 폴더색
+                    setBaseColor(getBaseColor(index)); // 배경색
+                    setFolderIconColor(getFolderColor(index)); // 폴더색
 
-                    // 변경 컬러 쿠키에 저장 js-cookie
-                    Cookies.set("baseColor", menu.setBaseColor);
-                    Cookies.set("folderIconColor", menu.setFolderIconColor);
+                    // 변경 컬러 인덱스 쿠키에 저장 js-cookie
+                    Cookies.set("BaseIndex", index);
 
                 }
             })
@@ -53,10 +47,9 @@ export default function FooterMenu({ index, activeMenu,
                     {   // 메뉴 추가
                         menus.map((item) => (
                             item.color.map((menu, index) => (
-                                <ConfigMenu key={index} index={index}
-                                    color={menu.color} colorName={`${menu.colorName}`}
-                                    setBaseColor={setBaseColor} setFolderIconColor={setFolderIconColor}
-                                    onClick={() => ConfigMenuClick(index)} />
+                                <ConfigMenu key={index}
+                                    color={menu.color} colorName={`${menu.colorName}`} // 설정 메뉴 데이터
+                                    onClick={() => ConfigMenuClick(index)} /> // 클릭 시 메뉴 인덱스 전달
                             ))
                         ))
                     }

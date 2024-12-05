@@ -1,23 +1,31 @@
 import { useEffect, useRef, useState } from "react";
-import Red from "./assets/close_folder_red.svg";
 import xIcon from "./assets/xicon.svg";
 import setting from "./assets/setting.svg";
 import FooterMenu from "./components/FooterMenu";
 import Cookies from "js-cookie";
+import { colorData, getBaseColor, getFolderColor, getOpenFolderColor } from "./lib/SettingColor";
 
 
 function App() {
-  const [baseColor, setBaseColor] = useState("bg-color-red"); // 배경 색
-  const [folderIconColor, setFolderIconColor] = useState(Red); // 폴더 색
+  const [baseColor, setBaseColor] = useState(null); // 배경 색
+  const [folderIconColor, setFolderIconColor] = useState(null); // 닫힌 폴더 색
+  const [openFolderIconColor, setOpenFolderIconColor] = useState(null); // 열린 폴더 색
   const [activeMenu, setActiveMenu] = useState(null); // 현재 활성화된 메뉴 인덱스
 
   // 색상 쿠키에서 읽어오기
   useEffect(() => {
-    const savedBaseColor = Cookies.get("baseColor");
-    const savedFolderIconColor = Cookies.get("folderIconColor");
-
-    if (savedBaseColor) setBaseColor(savedBaseColor);
-    if (savedFolderIconColor) setFolderIconColor(savedFolderIconColor);
+    const savedBaseIndex = Cookies.get("BaseIndex");
+    // 쿠키에 베이스 인덱스 여부 확인 후 컬러 지정
+    if (savedBaseIndex) {
+      setBaseColor(getBaseColor(savedBaseIndex));
+      setFolderIconColor(getFolderColor(savedBaseIndex));
+      setOpenFolderIconColor(getFolderColor(savedBaseIndex));
+    }else {
+      setBaseColor(getBaseColor(0));
+      setFolderIconColor(getFolderColor(0));
+      setOpenFolderIconColor(getOpenFolderColor(0));
+    }
+    
   }, []);
 
   // 메뉴 영역 감지용 ref
@@ -67,11 +75,11 @@ function App() {
               {
                 menus.map((item) => (
                   item.menu.map((menu, index) => (
-                    <FooterMenu key={index} index={index} activeMenu={activeMenu} // index와 현재 클릭 된 메뉴 전달
-                    divCSS={activeMenu === index ? "border-custom-2" : "border-custom-1"} // 클릭된 메뉴와 인덱스가 같은지 확인
+                    <FooterMenu key={index} index={index} activeMenu={activeMenu} // 메뉴의 index와 현재 클릭 된 메뉴 전달
+                    divCSS={activeMenu === index ? "border-custom-2" : "border-custom-1"} // 클릭 된 메뉴와 인덱스가 같은지 확인
                     src={menu.src} alt={menu.alt} imgCSS={`${menu.className}`} span={menu.span} // 메뉴 데이터
-                    onClick={() => menuClick(index)} // 클릭 시 해당 메뉴 인덱스 저장
-                    setBaseColor={setBaseColor} setFolderIconColor={setFolderIconColor} /> // 배경 컬러, 폴더 아이콘 컬러
+                    onClick={() => menuClick(index)} // 클릭 된 메뉴 인덱스 저장
+                    setBaseColor={setBaseColor} setFolderIconColor={setFolderIconColor} setOpenFolderIconColor={setOpenFolderIconColor} /> // 배경 컬러, 폴더 아이콘 컬러
                   ))
                 ))
               }
