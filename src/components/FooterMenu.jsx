@@ -6,7 +6,7 @@ import { getBaseColor, getFolderColor } from "../lib/SettingColor";
 export default function FooterMenu({ index, activeMenu,
     divCSS, src, alt, imgCSS, span, 
     onClick,
-    setBaseColor, setFolderIconColor }) {
+    setBaseColor, setFolderIconColor, }) {
     const ICON_CONTAINER = `flex-1 flex flex-col items-center justify-center py-2 cursor-pointer`;
 
     // 설정 메뉴 데이터
@@ -26,8 +26,8 @@ export default function FooterMenu({ index, activeMenu,
 
     // 쿠키 저장
     const ConfigMenuClick = (index) => {
-        menus.map((item) => {
-            item.color.map((_, menuIndex) => {
+        menus.forEach((item) => {
+            item.color.forEach((_, menuIndex) => {
                 if(index === menuIndex) {
                     setBaseColor(getBaseColor(index)); // 배경색
                     setFolderIconColor(getFolderColor(index)); // 폴더색
@@ -40,10 +40,12 @@ export default function FooterMenu({ index, activeMenu,
         });
     };
     return (
+        // 전체 메뉴
         <li className={`${ICON_CONTAINER} ${divCSS} relative`} onClick={onClick}>
             {/* 환경설정 클릭 시 나오는 메뉴 / index가 2인 FooterMenu 메뉴에서만 렌더링*/}
             {index === 2 && activeMenu === index && (
-                <ul className="absolute bottom-full right-0 w-full border-custom-1 px-1 z-10">
+                <ul className="absolute bottom-full right-0 w-full border-custom-1 px-1 z-10"
+                onClick={(e) => e.stopPropagation()}>
                     {   // 메뉴 추가
                         menus.map((item) => (
                             item.color.map((menu, index) => (

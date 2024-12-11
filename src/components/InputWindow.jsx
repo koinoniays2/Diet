@@ -6,7 +6,7 @@ export default function InputWindow({ children, handleSubmit, onValid }) {
                 <div className="p-1 border-black rounded-t-xl border-b bg-color-hotpink">
                     Diet
                 </div>
-                <div className="w-full p-5">
+                <div className="w-full p-5 bg-[#F6F6F6] rounded-b-xl">
                     {/* 전달받은 props - handleSubmit, onValid */}
                     <form onSubmit={handleSubmit(onValid)} className="flex flex-col gap-12">
                         { children }

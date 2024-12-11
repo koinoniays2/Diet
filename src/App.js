@@ -3,14 +3,15 @@ import xIcon from "./assets/xicon.svg";
 import setting from "./assets/setting.svg";
 import FooterMenu from "./components/FooterMenu";
 import Cookies from "js-cookie";
-import { colorData, getBaseColor, getFolderColor, getOpenFolderColor } from "./lib/SettingColor";
-
+import { getBaseColor, getFolderColor, getOpenFolderColor } from "./lib/SettingColor";
+import NewOpenModal from "./components/NewOpenModal";
 
 function App() {
   const [baseColor, setBaseColor] = useState(null); // 배경 색
   const [folderIconColor, setFolderIconColor] = useState(null); // 닫힌 폴더 색
   const [openFolderIconColor, setOpenFolderIconColor] = useState(null); // 열린 폴더 색
   const [activeMenu, setActiveMenu] = useState(null); // 현재 활성화된 메뉴 인덱스
+  const [openModal, setOpenModal] = useState(true); // 새폴더 모달
 
   // 색상 쿠키에서 읽어오기
   useEffect(() => {
@@ -20,12 +21,12 @@ function App() {
       setBaseColor(getBaseColor(savedBaseIndex));
       setFolderIconColor(getFolderColor(savedBaseIndex));
       setOpenFolderIconColor(getFolderColor(savedBaseIndex));
-    }else {
+    } else {
       setBaseColor(getBaseColor(0));
       setFolderIconColor(getFolderColor(0));
       setOpenFolderIconColor(getOpenFolderColor(0));
     }
-    
+
   }, []);
 
   // 메뉴 영역 감지용 ref
@@ -59,6 +60,10 @@ function App() {
   const menuClick = (index) => {
     // 함수형 업데이트 : prevIndex는 setActiveMenu의 이전 상태를 나타내는 매개변수
     setActiveMenu((prevIndex) => (prevIndex === index ? null : index)); // 클릭된 메뉴 인덱스 업데이트
+    // 새폴더 클릭 처리
+    if (index === 0) {
+      setOpenModal(true);
+    }
   };
 
   return (
@@ -76,10 +81,11 @@ function App() {
                 menus.map((item) => (
                   item.menu.map((menu, index) => (
                     <FooterMenu key={index} index={index} activeMenu={activeMenu} // 메뉴의 index와 현재 클릭 된 메뉴 전달
-                    divCSS={activeMenu === index ? "border-custom-2" : "border-custom-1"} // 클릭 된 메뉴와 인덱스가 같은지 확인
-                    src={menu.src} alt={menu.alt} imgCSS={`${menu.className}`} span={menu.span} // 메뉴 데이터
-                    onClick={() => menuClick(index)} // 클릭 된 메뉴 인덱스 저장
-                    setBaseColor={setBaseColor} setFolderIconColor={setFolderIconColor} setOpenFolderIconColor={setOpenFolderIconColor} /> // 배경 컬러, 폴더 아이콘 컬러
+                      divCSS={activeMenu === index ? "border-custom-2" : "border-custom-1"} // 클릭 된 메뉴와 인덱스가 같은지 확인
+                      src={menu.src} alt={menu.alt} imgCSS={`${menu.className}`} span={menu.span} // 메뉴 데이터
+                      onClick={() => menuClick(index)} // 클릭 된 메뉴 인덱스 저장
+                      setBaseColor={setBaseColor} setFolderIconColor={setFolderIconColor} setOpenFolderIconColor={setOpenFolderIconColor} // 배경 컬러, 폴더 아이콘 컬러
+                      />
                   ))
                 ))
               }
@@ -87,6 +93,9 @@ function App() {
           </nav>
         </footer>
       </section>
+      {
+        openModal && <NewOpenModal setOpenModal={setOpenModal} />
+      }
     </main>
   );
 }
