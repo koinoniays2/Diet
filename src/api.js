@@ -16,7 +16,6 @@ export async function apiGetLoginStatus() {
 };
 /* 세션 ID가 없으면 서버에서 result : false, user : null 응답을 보내기 때문에, 
 로그인되지 않았음을 알 수 있음 */
-
 // 로그인
 export async function apiPostLogin(data) {
     try {
@@ -45,4 +44,31 @@ export async function apiPostCreateUser(data) {
     }catch(error) {
         console.log(error);
     }
+}
+
+// 폴더 생성
+export async function apiPostCreateFolder(data) {
+    try {
+        return await fetch (`${BASE_URL}/folder/create`, {
+            method:  "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify(data)
+        }).then(res => res.json());
+    }catch(error) {
+        console.log(error);
+    }
+}
+// 폴더 읽기
+export async function apiGetFolder() {
+    try{
+        return await fetch(`${BASE_URL}/folder/list`, {
+            method: "GET",
+            credentials: "include"
+        }).then((res) => res.json());
+    }catch(error) {
+        console.log(error);
+    };
 }

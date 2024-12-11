@@ -5,13 +5,16 @@ import FooterMenu from "./components/FooterMenu";
 import Cookies from "js-cookie";
 import { getBaseColor, getFolderColor, getOpenFolderColor } from "./lib/SettingColor";
 import NewOpenModal from "./components/NewOpenModal";
+import FolderList from "./components/FolderList";
 
 function App() {
   const [baseColor, setBaseColor] = useState(null); // 배경 색
   const [folderIconColor, setFolderIconColor] = useState(null); // 닫힌 폴더 색
   const [openFolderIconColor, setOpenFolderIconColor] = useState(null); // 열린 폴더 색
   const [activeMenu, setActiveMenu] = useState(null); // 현재 활성화된 메뉴 인덱스
-  const [openModal, setOpenModal] = useState(true); // 새폴더 모달
+  const [openModal, setOpenModal] = useState(false); // 새폴더 모달
+
+
 
   // 색상 쿠키에서 읽어오기
   useEffect(() => {
@@ -69,9 +72,7 @@ function App() {
   return (
     <main className={`${baseColor} flex items-center justify-center`}>
       <section className="w-full max-w-[480px]">
-        <div className="min-h-[calc(100vh-93px)]">
-
-        </div>
+        <FolderList folderIconColor={folderIconColor} openFolderIconColor={openFolderIconColor} />
         {/* 메뉴 */}
         <footer ref={menuRef} // ref : 메뉴 영역 감지
           className="sticky bottom-0">
@@ -85,7 +86,7 @@ function App() {
                       src={menu.src} alt={menu.alt} imgCSS={`${menu.className}`} span={menu.span} // 메뉴 데이터
                       onClick={() => menuClick(index)} // 클릭 된 메뉴 인덱스 저장
                       setBaseColor={setBaseColor} setFolderIconColor={setFolderIconColor} setOpenFolderIconColor={setOpenFolderIconColor} // 배경 컬러, 폴더 아이콘 컬러
-                      />
+                    />
                   ))
                 ))
               }
