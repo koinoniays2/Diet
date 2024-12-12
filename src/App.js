@@ -72,7 +72,7 @@ function App() {
   return (
     <main className={`${baseColor} flex items-center justify-center`}>
       <section className="w-full max-w-[480px]">
-        <FolderList folderIconColor={folderIconColor} openFolderIconColor={openFolderIconColor} />
+        <FolderList folderIconColor={folderIconColor} openFolderIconColor={openFolderIconColor} baseColor={baseColor}/>
         {/* 메뉴 */}
         <footer ref={menuRef} // ref : 메뉴 영역 감지
           className="sticky bottom-0">

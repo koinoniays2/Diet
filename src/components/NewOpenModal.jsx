@@ -16,8 +16,11 @@ export default function NewOpenModal({ setOpenModal }) {
     const { mutate } = useMutation(apiPostCreateFolder, {
         onSuccess: (data) => {
             queryClient.invalidateQueries("getFolder");
-            setServerMessage(data.message);
-            if(serverMessage) setOpenModal(false);
+            if(!data.result) {
+                setServerMessage(data.message);
+            } else {
+                setOpenModal(false);
+            };
         }
     });
 
@@ -28,14 +31,16 @@ export default function NewOpenModal({ setOpenModal }) {
     return (
         <div className="w-full absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-black bg-opacity-30">
             <InputWindow handleSubmit={handleSubmit} onValid={onValid}>
-                <Input name="folderName" placeholder="폴더명을 입력하세요." register={register}
-                    required="폴더명을 입력하세요." serverChange={serverChange}/>
-                {/* 서버 메세지 */}
-                {
-                    serverMessage && (
-                        <p className="text-red-500 text-[13px]">{serverMessage}</p>
-                    )
-                }
+                <div className="flex flex-col gap-2">
+                    <Input name="folderName" placeholder="폴더명을 입력하세요." register={register}
+                        required="폴더명을 입력하세요." serverChange={serverChange}/>
+                    {/* 서버 메세지 */}
+                    {
+                        serverMessage && (
+                            <p className="text-red-500 text-[13px]">{serverMessage}</p>
+                        )
+                    }
+                </div>
                 <div className="flex gap-4">
                     <Button type="submit" text="확인" color="btn-color-pink" />
                     <Button type="button" text="취소" color="btn-color-gray" onClick={() => { setOpenModal(false) }} />
