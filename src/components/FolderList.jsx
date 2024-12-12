@@ -1,6 +1,7 @@
 import { useQuery } from 'react-query';
 import { apiGetFolder } from '../api';
 import { useState } from 'react';
+import MemoModal from './MemoModal';
 
 export default function FolderList({ folderIconColor, openFolderIconColor, baseColor }) {
     // 폴더 리스트 불러오기
@@ -26,20 +27,10 @@ export default function FolderList({ folderIconColor, openFolderIconColor, baseC
             ))}
         </div>
         {
-        // 폴더 클릭 시 메모 저장
+        // 폴더 클릭 시 메모 모달
         folderID && 
         <section className="w-full h-full p-8 absolute top-0 left-0 bg-black bg-opacity-50 z-10">
-            <div className={`w-full h-full p-4 relative ${baseColor}`}>
-                {/* 폴더 명, 닫기 버튼 */}
-                <div>
-                    <h1 className="font-bold text-xl">{folderName}</h1>
-                    <button type="button" className="absolute right-4 top-2 text-3xl"
-                    onClick={() => {
-                        setFolderID(null);
-                        setFolderName(null);
-                    }}>X</button>
-                </div>
-            </div>
+            <MemoModal folderID={folderID} folderName={folderName} setFolderID={setFolderID} setFolderName={setFolderName} baseColor={baseColor} />
         </section>
         }   
         </>

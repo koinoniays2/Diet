@@ -72,3 +72,31 @@ export async function apiGetFolder() {
         console.log(error);
     };
 }
+
+// 메모 저장
+export async function apiPostCreateMemo(data) {
+    try {
+        return await fetch(`${BASE_URL}/memo/create`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include", // 세션 쿠키 포함
+            body: JSON.stringify(data) // 데이터 추가
+        }).then((res) => res.json());
+    } catch (error) {
+        console.log(error);
+    }
+}
+// 메모 불러오기
+export async function apiGetMemo(folderId) {
+    try {
+        const response = await fetch(`${BASE_URL}/memo/list?folderId=${folderId}`, {
+            method: "GET",
+            credentials: "include",
+        });
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+    }
+}

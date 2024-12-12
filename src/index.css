@@ -63,3 +63,11 @@ body {
 html {
     font-size: 16px;
 }
+
+textarea::-webkit-scrollbar {
+    width: 2px; /* 스크롤바 너비 */
+}
+textarea::-webkit-scrollbar-thumb {
+    background: white; /* 스크롤바 색상 */
+    border-radius: 4px; /* 둥근 모서리 */
+}
