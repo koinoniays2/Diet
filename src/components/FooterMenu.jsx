@@ -46,7 +46,7 @@ export default function FooterMenu({ index, activeMenu,
         <li className={`${ICON_CONTAINER} ${divCSS} relative ${baseColor}`} onClick={onClick}>
             {/* 환경설정 클릭 시 나오는 메뉴 / index가 2인 FooterMenu 메뉴에서만 렌더링*/}
             {index === 2 && activeMenu === index && (
-                <ul className="absolute bottom-full right-0 w-full border-custom-1 px-1 z-10"
+                <ul className={`absolute bottom-full right-0 w-full border-custom-1 px-1 z-10 ${baseColor}`}
                 onClick={(e) => e.stopPropagation()}>
                     {   // 메뉴 추가
                         menus.map((item) => (
