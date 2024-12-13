@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { apiPostLogin } from "../api";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ClipLoader } from "react-spinners";
 
 export default function Login() {
     // const [userData, setUserData] = useState(null); // API 요청 결과값
@@ -17,7 +18,7 @@ export default function Login() {
     const queryClient = useQueryClient();  // react query 라이브러리 useQueryClient 훅
     
 
-    const { mutate } = useMutation(apiPostLogin, {
+    const { mutate, isLoading } = useMutation(apiPostLogin, {
         onSuccess: (data) => {
             // invalidateQueries(key): 쿼리 무효화 후 데이터 다시 가져오기
             queryClient.invalidateQueries("getSession"); 
@@ -59,7 +60,7 @@ export default function Login() {
             </div>
             {/* 버튼 */}
             <div className="flex flex-col gap-2">
-                <Button type="submit" color="btn-color-pink" text="로그인"/>
+                <Button type="submit" color="btn-color-pink" text={isLoading ? <ClipLoader size={24} /> : "로그인" }/>
                 <Button type="button" color="btn-color-gray" text="회원가입" onClick={() => navigate("/signup")}/>
             </div>
         </InputWindow>

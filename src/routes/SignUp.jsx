@@ -8,6 +8,7 @@ import Button from "../components/Button";
 import checkTrue from "../assets/check_true.svg";
 import checkFalse from "../assets/check_false.svg";
 import { useNavigate } from "react-router-dom";
+import { ClipLoader } from "react-spinners";
 
 export default function SignUp() {
     const [serverMessage, setServerMessage] = useState(null); // 서버 메세지
@@ -15,7 +16,7 @@ export default function SignUp() {
     const navigate = useNavigate(); // react router 라이브러리 useNavigate 훅
 
     // API 요청 react query 라이브러리 useMutation 훅
-    const { mutate } = useMutation(apiPostCreateUser, {
+    const { mutate, isLoading } = useMutation(apiPostCreateUser, {
         onSuccess: (data) => {
             setServerMessage(data.message);
             if(data.result) navigate("/login");
@@ -139,7 +140,7 @@ export default function SignUp() {
             <div className="flex flex-col gap-1">
                 {/* 서버 오류 메세지 */}
                 {serverMessage && (<p className="text-red-500">{serverMessage}</p>)}
-                <Button disable={!isChecked} type="submit" color={isChecked ? "btn-color-pink" : "btn-color-gray"} text="회원가입" />
+                <Button disable={!isChecked} type="submit" color={isChecked ? "btn-color-pink" : "btn-color-gray"} text={isLoading ? <ClipLoader size={24} /> : "회원가입"} />
                 <p className="text-center">이미 회원이시라면?&nbsp;
                     <span onClick={() => {navigate("/login")}} 
                     className="text-[#ED8EE0] cursor-pointer hover:underline">로그인</span></p>
