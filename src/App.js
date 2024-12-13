@@ -4,7 +4,7 @@ import setting from "./assets/setting.svg";
 import FooterMenu from "./components/FooterMenu";
 import Cookies from "js-cookie";
 import { getBaseColor, getFolderColor, getOpenFolderColor } from "./lib/SettingColor";
-import NewOpenModal from "./components/NewOpenModal";
+import NewFolderModal from "./components/NewFolderModal";
 import FolderList from "./components/FolderList";
 
 function App() {
@@ -14,8 +14,6 @@ function App() {
   const [activeMenu, setActiveMenu] = useState(null); // 현재 활성화된 메뉴 인덱스
   const [openModal, setOpenModal] = useState(false); // 새폴더 모달
 
-
-
   // 색상 쿠키에서 읽어오기
   useEffect(() => {
     const savedBaseIndex = Cookies.get("BaseIndex");
@@ -23,7 +21,7 @@ function App() {
     if (savedBaseIndex) {
       setBaseColor(getBaseColor(savedBaseIndex));
       setFolderIconColor(getFolderColor(savedBaseIndex));
-      setOpenFolderIconColor(getFolderColor(savedBaseIndex));
+      setOpenFolderIconColor(getOpenFolderColor(savedBaseIndex));
     } else {
       setBaseColor(getBaseColor(0));
       setFolderIconColor(getFolderColor(0));
@@ -53,7 +51,7 @@ function App() {
   const menus = [
     {
       menu: [
-        { src: folderIconColor, alt: "폴더", className: "h-10", span: "새폴더" },
+        { src: folderIconColor, alt: "새폴더", className: "h-10", span: "새폴더" },
         { src: xIcon, alt: "폴더삭제", className: "h-11", span: "폴더삭제" },
         { src: setting, alt: "환경설정", className: "h-11", span: "환경설정" }
       ]
@@ -72,8 +70,9 @@ function App() {
   return (
     <main className={`${baseColor} flex items-center justify-center`}>
       <section className="w-full max-w-[480px]">
+        {/* 폴더 */}
         <FolderList folderIconColor={folderIconColor} openFolderIconColor={openFolderIconColor} baseColor={baseColor}/>
-        {/* 메뉴 */}
+        {/* 하단 메뉴 */}
         <footer ref={menuRef} // ref : 메뉴 영역 감지
           className="sticky bottom-0">
           <nav>
@@ -86,7 +85,7 @@ function App() {
                       src={menu.src} alt={menu.alt} imgCSS={`${menu.className}`} span={menu.span} // 메뉴 데이터
                       onClick={() => menuClick(index)} // 클릭 된 메뉴 인덱스 저장
                       setBaseColor={setBaseColor} setFolderIconColor={setFolderIconColor} setOpenFolderIconColor={setOpenFolderIconColor} // 배경 컬러, 폴더 아이콘 컬러
-                    />
+                      baseColor={baseColor} />
                   ))
                 ))
               }
@@ -94,8 +93,9 @@ function App() {
           </nav>
         </footer>
       </section>
+      {/* 새폴더 클릭 시 */}
       {
-        openModal && <NewOpenModal setOpenModal={setOpenModal} />
+        openModal && <NewFolderModal setOpenModal={setOpenModal} />
       }
     </main>
   );

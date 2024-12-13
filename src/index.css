@@ -71,3 +71,8 @@ textarea::-webkit-scrollbar-thumb {
     background: white; /* 스크롤바 색상 */
     border-radius: 4px; /* 둥근 모서리 */
 }
+
+input, textarea {
+    background-color: transparent;
+    outline: none;
+}

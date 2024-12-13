@@ -2,6 +2,7 @@ import { useQuery } from 'react-query';
 import { apiGetFolder } from '../api';
 import { useState } from 'react';
 import MemoModal from './MemoModal';
+import { FadeLoader } from 'react-spinners';
 
 export default function FolderList({ folderIconColor, openFolderIconColor, baseColor }) {
     // 폴더 리스트 불러오기
@@ -14,17 +15,26 @@ export default function FolderList({ folderIconColor, openFolderIconColor, baseC
     return (
         <>
         <div className="min-h-[calc(100vh-93px)] p-4 flex flex-wrap justify-start content-start gap-8">
-            {/* 폴더 리스트 */}
-            {data?.data?.map((item, index) => (
-                <div key={index} className="flex flex-col items-center basis-16 cursor-pointer"
-                onClick={() => {
-                    setFolderID(item._id);
-                    setFolderName(item.folderName);
-                    }}>
-                    <img src={folderIconColor} alt="folder" className="h-10"/>
-                    <span>{item.folderName}</span>
+            {isLoading ? (
+                <div className="w-full h-full flex justify-center items-center">
+                    <FadeLoader />
                 </div>
-            ))}
+            ) : (
+                /* 폴더 리스트 */
+                data?.data?.map((item, index) => (
+                    <div
+                        key={index}
+                        className="flex flex-col items-center basis-16 cursor-pointer"
+                        onClick={() => {
+                            setFolderID(item._id);
+                            setFolderName(item.folderName);
+                        }}
+                    >
+                        <img src={item.existMemo === 1 ? openFolderIconColor : folderIconColor} alt="folder" className="h-10" />
+                        <span>{item.folderName}</span>
+                    </div>
+                ))
+            )}
         </div>
         {
         // 폴더 클릭 시 메모 모달

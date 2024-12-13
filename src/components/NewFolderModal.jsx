@@ -1,19 +1,20 @@
 import { useForm } from "react-hook-form";
 import InputWindow from "./InputWindow";
 import Input from "./Input";
-import Button from "../components/Button";
+import Button from "./Button";
 import { apiPostCreateFolder } from "../api";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
+import { ClipLoader } from "react-spinners";
 
-export default function NewOpenModal({ setOpenModal }) {
+export default function NewFolderModal({ setOpenModal }) {
     const { register, handleSubmit } = useForm({ mode: "onChange" });
     const [serverMessage, setServerMessage] = useState(null); // 서버 메세지
     const onValid = (data) => mutate(data); // 콜백 함수
     const queryClient = useQueryClient();
 
     // API 요청 react query 라이브러리 useMutation 훅
-    const { mutate } = useMutation(apiPostCreateFolder, {
+    const { mutate, isLoading } = useMutation(apiPostCreateFolder, {
         onSuccess: (data) => {
             queryClient.invalidateQueries("getFolder");
             if(!data.result) {
@@ -42,7 +43,7 @@ export default function NewOpenModal({ setOpenModal }) {
                     }
                 </div>
                 <div className="flex gap-4">
-                    <Button type="submit" text="확인" color="btn-color-pink" />
+                    <Button type="submit" text={isLoading ? <ClipLoader size={16}/> : "확인"} color="btn-color-pink" disable={isLoading} />
                     <Button type="button" text="취소" color="btn-color-gray" onClick={() => { setOpenModal(false) }} />
                 </div>
             </InputWindow>
