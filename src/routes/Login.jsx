@@ -60,7 +60,7 @@ export default function Login() {
             </div>
             {/* 버튼 */}
             <div className="flex flex-col gap-2">
-                <Button type="submit" color="btn-color-pink" text={isLoading ? <ClipLoader size={24} /> : "로그인" }/>
+                <Button type="submit" color="btn-color-pink" text={isLoading ? <ClipLoader size={24} /> : "로그인" } disable={isLoading} />
                 <Button type="button" color="btn-color-gray" text="회원가입" onClick={() => navigate("/signup")}/>
             </div>
         </InputWindow>

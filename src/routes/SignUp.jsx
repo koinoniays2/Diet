@@ -140,7 +140,7 @@ export default function SignUp() {
             <div className="flex flex-col gap-1">
                 {/* 서버 오류 메세지 */}
                 {serverMessage && (<p className="text-red-500">{serverMessage}</p>)}
-                <Button disable={!isChecked} type="submit" color={isChecked ? "btn-color-pink" : "btn-color-gray"} text={isLoading ? <ClipLoader size={24} /> : "회원가입"} />
+                <Button disable={!isChecked ||  isLoading } type="submit" color={isChecked ? "btn-color-pink" : "btn-color-gray"} text={isLoading ? <ClipLoader size={24} /> : "회원가입"} />
                 <p className="text-center">이미 회원이시라면?&nbsp;
                     <span onClick={() => {navigate("/login")}} 
                     className="text-[#ED8EE0] cursor-pointer hover:underline">로그인</span></p>
