@@ -10,7 +10,7 @@ import SignUp from './routes/SignUp';
 import Login from './routes/Login';
 import GuestOnly from './components/GuestOnly';
 
-// 라우터 
+// 라우터
 const router = createBrowserRouter([
   {
     path: "/",
