@@ -31,6 +31,17 @@ export async function apiPostLogin(data) {
         console.log(error);
     };
 };
+// 로그아웃
+export async function apiPostLogout() {
+    try {
+        return await fetch(`${BASE_URL}/user/logout`, {
+            method: "POST",
+            credentials: "include" // 세션 쿠키를 포함하여 서버에 전송
+        }).then(res => res.json());
+    } catch (error) {
+        console.log(error);
+    }
+};
 // 회원가입
 export async function apiPostCreateUser(data) {
     try {

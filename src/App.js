@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import xIcon from "./assets/xicon.svg";
 import setting from "./assets/setting.svg";
 import FooterMenu from "./components/FooterMenu";
@@ -6,6 +6,8 @@ import Cookies from "js-cookie";
 import { getBaseColor, getFolderColor, getOpenFolderColor } from "./lib/SettingColor";
 import NewFolderModal from "./components/NewFolderModal";
 import FolderList from "./components/FolderList";
+import { useMutation } from "react-query";
+import { apiPostLogout } from "./api";
 
 function App() {
   const [baseColor, setBaseColor] = useState(null); // 배경 색
@@ -33,11 +35,15 @@ function App() {
   // 메뉴 영역 감지용 ref
   const menuRef = useRef(null);
   // 메뉴 바깥을 클릭하면 모든 상태 초기화
-  const outsideClick = (event) => {
-    if (menuRef.current && !menuRef.current.contains(event.target)) {
-      setActiveMenu(null); // 모든 메뉴 비활성화
-    };
-  };
+  const outsideClick = useCallback(
+    (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        if (activeMenu === 1) return;
+        setActiveMenu(null);
+      }
+    },
+    [activeMenu]
+  );
   useEffect(() => {
     // window에 클릭 이벤트 추가
     window.addEventListener("click", outsideClick);
@@ -45,7 +51,7 @@ function App() {
     return () => {
       window.removeEventListener("click", outsideClick);
     };
-  }, []);
+  }, [outsideClick]);
 
   // 메뉴 데이터
   const menus = [
@@ -67,11 +73,32 @@ function App() {
     }
   };
 
+  const { mutate, isLoding } = useMutation(apiPostLogout, {
+    onSuccess: (data) => {
+      if (data.result) {
+        console.log("로그아웃 성공:", data.message);
+        // 로그아웃 후 리디렉션 또는 상태 초기화
+        window.location.href = "/login"; // 로그인 페이지로 리디렉션
+      } else {
+        console.error("로그아웃 실패:", data.message);
+      }
+    },
+    onError: (error) => {
+      console.error("로그아웃 중 오류 발생:", error);
+    }
+  });
+  console.log(isLoding);
   return (
     <main className={`${baseColor} flex items-center justify-center`}>
       <section className="w-full max-w-[480px]">
+        <div className="text-right p-2">
+          <button onClick={() => mutate()} 
+          className="p-2 border-custom-1">
+            로그아웃
+          </button>
+        </div>
         {/* 폴더 */}
-        <FolderList folderIconColor={folderIconColor} openFolderIconColor={openFolderIconColor} baseColor={baseColor}/>
+        <FolderList folderIconColor={folderIconColor} openFolderIconColor={openFolderIconColor} baseColor={baseColor} activeMenu={activeMenu} />
         {/* 하단 메뉴 */}
         <footer ref={menuRef} // ref : 메뉴 영역 감지
           className="sticky bottom-0">

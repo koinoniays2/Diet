@@ -34,7 +34,7 @@ export default function MemoModal({ folderID, folderName, setFolderID, setFolder
                         setFolderID(null);
                         setFolderName(null);
                     }}>X</button>
-                <input className="font-bold text-xl text-center py-4" value={folderName} 
+                <input className="w-full font-bold text-xl text-center py-4" value={folderName} 
                 onChange={(e) => setFolderName(e.target.value)}/>
             </div>
             {/* 메모 쓰기 */}
