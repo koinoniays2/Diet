@@ -8,7 +8,7 @@ import checkFalse from "../assets/check_false.svg";
 import trash from "../assets/trash.svg";
 import { AnimatePresence, motion } from "framer-motion";
 
-export default function FolderList({ folderIconColor, openFolderIconColor, baseColor, activeMenu }) {
+export default function FolderList({ folderIconColor, openFolderIconColor, baseColor, activeMenu, setActiveMenu }) {
     // 폴더 리스트 불러오기
     const { data, isLoading } = useQuery("getFolder", apiGetFolder);
     // 폴더 ID
@@ -41,9 +41,12 @@ export default function FolderList({ folderIconColor, openFolderIconColor, baseC
     };
     // 폴더 삭제 API
     const { mutate, isLoading: isDeleting } = useMutation(apiDeleteFolder, {
-        onSuccess: () => {
+        onSuccess: (data) => {
             queryClient.invalidateQueries("getFolder"); // 폴더 리스트 리프레시
             setCheckedItem([]); // 체크 상태 초기화
+            if (data.result) {
+                setActiveMenu(null);
+            }
         },
     });
     // 삭제 
@@ -93,20 +96,20 @@ export default function FolderList({ folderIconColor, openFolderIconColor, baseC
                     ))
                 )}
                 <AnimatePresence>
-                {
-                    activeMenu === 1 &&
-                    <motion.div
-                        initial={{ y: 100, x: "-50%", opacity: 0 }} // 시작 위치
-                        animate={{ y: 0, opacity: 1 }}  // 화면에 나타나는 위치
-                        exit={{ y: 100, opacity: 0 }}   // 사라질 때 위치 (optional)
-                        transition={{ duration: 0.5 }}  // 애니메이션 지속 시간
-                        className="fixed bottom-24 left-1/2 -translate-x-1/2 z-10 cursor-pointer py-4"
-                        onClick={folderDelete}>
-                        {
-                            isDeleting ? <FadeLoader /> : <img src={trash} alt="trash-icon" />}
-                    </motion.div>
+                    {
+                        activeMenu === 1 &&
+                        <motion.div
+                            initial={{ y: 100, x: "-50%", opacity: 0 }} // 시작 위치
+                            animate={{ y: 0, opacity: 1 }}  // 화면에 나타나는 위치
+                            exit={{ y: 100, opacity: 0 }}   // 사라질 때 위치 (optional)
+                            transition={{ duration: 0.5 }}  // 애니메이션 지속 시간
+                            className="fixed bottom-24 left-1/2 -translate-x-1/2 z-10 cursor-pointer py-4"
+                            onClick={folderDelete}>
+                            {
+                                isDeleting ? <FadeLoader /> : <img src={trash} alt="trash-icon" />}
+                        </motion.div>
 
-                }
+                    }
                 </AnimatePresence>
             </div>
             {

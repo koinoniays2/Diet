@@ -96,7 +96,7 @@ function App() {
           </button>
         </div>
         {/* 폴더 */}
-        <FolderList folderIconColor={folderIconColor} openFolderIconColor={openFolderIconColor} baseColor={baseColor} activeMenu={activeMenu} />
+        <FolderList folderIconColor={folderIconColor} openFolderIconColor={openFolderIconColor} baseColor={baseColor} activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
         {/* 하단 메뉴 */}
         <footer ref={menuRef} // ref : 메뉴 영역 감지
           className="sticky bottom-0">
