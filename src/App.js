@@ -8,6 +8,7 @@ import NewFolderModal from "./components/NewFolderModal";
 import FolderList from "./components/FolderList";
 import { useMutation } from "react-query";
 import { apiPostLogout } from "./api";
+import { ClipLoader } from "react-spinners";
 
 function App() {
   const [baseColor, setBaseColor] = useState(null); // 배경 색
@@ -76,8 +77,6 @@ function App() {
   const { mutate, isLoding } = useMutation(apiPostLogout, {
     onSuccess: (data) => {
       if (data.result) {
-        console.log("로그아웃 성공:", data.message);
-        // 로그아웃 후 리디렉션 또는 상태 초기화
         window.location.href = "/login"; // 로그인 페이지로 리디렉션
       } else {
         console.error("로그아웃 실패:", data.message);
@@ -87,14 +86,13 @@ function App() {
       console.error("로그아웃 중 오류 발생:", error);
     }
   });
-  console.log(isLoding);
   return (
     <main className={`${baseColor} flex items-center justify-center`}>
       <section className="w-full max-w-[480px]">
         <div className="text-right p-2">
           <button onClick={() => mutate()} 
           className="p-2 border-custom-1">
-            로그아웃
+            { isLoding ? <ClipLoader size={30}/> : "로그아웃" }
           </button>
         </div>
         {/* 폴더 */}
@@ -122,7 +120,7 @@ function App() {
       </section>
       {/* 새폴더 클릭 시 */}
       {
-        openModal && <NewFolderModal setOpenModal={setOpenModal} />
+        openModal && <NewFolderModal setOpenModal={setOpenModal} setActiveMenu={setActiveMenu}/>
       }
     </main>
   );

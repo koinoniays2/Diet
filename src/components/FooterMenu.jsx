@@ -1,6 +1,7 @@
 import ConfigMenu from "./ConfigMenu";
 import Cookies from "js-cookie";
 import { getBaseColor, getFolderColor, getOpenFolderColor } from "../lib/SettingColor";
+import { AnimatePresence, motion } from "framer-motion";
 
 
 export default function FooterMenu({ index, activeMenu,
@@ -45,8 +46,14 @@ export default function FooterMenu({ index, activeMenu,
         // 전체 메뉴
         <li className={`${ICON_CONTAINER} ${divCSS} relative ${baseColor}`} onClick={onClick}>
             {/* 환경설정 클릭 시 나오는 메뉴 / index가 2인 FooterMenu 메뉴에서만 렌더링*/}
+            <AnimatePresence>
             {index === 2 && activeMenu === index && (
-                <ul className={`absolute bottom-full right-0 w-full border-custom-1 px-1 z-10 ${baseColor}`}
+                <motion.ul 
+                initial={{ y: 70, opacity: 1 }}      // 시작 상태: 아래에서 위로 슬라이드
+                animate={{ y: 0, opacity: 1 }}       // 보여질 때: 위로 슬라이드, 불투명도 증가
+                exit={{ y: 80, opacity: 0 }}         // 사라질 때: 아래로 슬라이드
+                transition={{ duration: 0.5 }}       // 애니메이션 지속 시간
+                className={`absolute bottom-full right-0 w-full border-custom-1 px-1 -z-10 ${baseColor}`}
                 onClick={(e) => e.stopPropagation()}>
                     {   // 메뉴 추가
                         menus.map((item) => (
@@ -57,8 +64,9 @@ export default function FooterMenu({ index, activeMenu,
                             ))
                         ))
                     }
-                </ul>
+                </motion.ul>
             )}
+            </AnimatePresence>
             <img src={src} alt={alt} className={imgCSS} />
             <span>{span}</span>
         </li>

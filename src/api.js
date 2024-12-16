@@ -111,3 +111,19 @@ export async function apiGetMemo(folderId) {
         console.error(error);
     }
 }
+
+// 폴더 삭제
+export async function apiDeleteFolder(folderId) {
+    try {
+        return await fetch(`${BASE_URL}/folder/delete`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({ folderId }),
+        }).then((res) => res.json());
+    } catch (error) {
+        console.error(error);
+    }
+}

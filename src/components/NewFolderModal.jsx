@@ -6,8 +6,9 @@ import { apiPostCreateFolder } from "../api";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { ClipLoader } from "react-spinners";
+import { AnimatePresence, motion } from "framer-motion";
 
-export default function NewFolderModal({ setOpenModal }) {
+export default function NewFolderModal({ setOpenModal, setActiveMenu }) {
     const { register, handleSubmit } = useForm({ mode: "onChange" });
     const [serverMessage, setServerMessage] = useState(null); // 서버 메세지
     const onValid = (data) => mutate(data); // 콜백 함수
@@ -21,6 +22,7 @@ export default function NewFolderModal({ setOpenModal }) {
                 setServerMessage(data.message);
             } else {
                 setOpenModal(false);
+                setActiveMenu(null);
             };
         }
     });
@@ -30,7 +32,14 @@ export default function NewFolderModal({ setOpenModal }) {
     };
 
     return (
-        <div className="w-full absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-black bg-opacity-30">
+        <AnimatePresence>
+        <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}       
+        exit={{ opacity: 0 }}         
+        transition={{ duration: 0.3 }}       
+        className="z-20 w-full absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-black bg-opacity-30"
+        onClick={(e) => e.stopPropagation()}>
             <InputWindow handleSubmit={handleSubmit} onValid={onValid}>
                 <div className="flex flex-col gap-2">
                     <Input name="folderName" placeholder="폴더명을 입력하세요." register={register}
@@ -44,9 +53,10 @@ export default function NewFolderModal({ setOpenModal }) {
                 </div>
                 <div className="flex gap-4">
                     <Button type="submit" text={isLoading ? <ClipLoader size={16}/> : "확인"} color="btn-color-pink" disable={isLoading} />
-                    <Button type="button" text="취소" color="btn-color-gray" onClick={() => { setOpenModal(false) }} />
+                    <Button type="button" text="취소" color="btn-color-gray" onClick={() => { setOpenModal(false); setActiveMenu(null); }} />
                 </div>
             </InputWindow>
-        </div>
+        </motion.div>
+        </AnimatePresence>
     )
 }
