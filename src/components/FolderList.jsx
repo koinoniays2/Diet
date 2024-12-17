@@ -103,7 +103,7 @@ export default function FolderList({ folderIconColor, openFolderIconColor, baseC
                             animate={{ y: 0, opacity: 1 }}  // 화면에 나타나는 위치
                             exit={{ y: 100, opacity: 0 }}   // 사라질 때 위치 (optional)
                             transition={{ duration: 0.5 }}  // 애니메이션 지속 시간
-                            className="fixed bottom-24 left-1/2 -translate-x-1/2 z-10 cursor-pointer py-4"
+                            className="fixed bottom-24 left-1/2 -translate-x-1/2 cursor-pointer py-4"
                             onClick={folderDelete}>
                             {
                                 isDeleting ? <FadeLoader /> : <img src={trash} alt="trash-icon" />}
