@@ -1,4 +1,4 @@
-const BASE_URL = process.env.REACT_APP_BASE_URL;
+const BASE_URL = process.env.REACT_APP_BASE_URL; // 서버 주소
 
 // 로그인 여부 확인
 /* 클라이언트와 서버가 다른 도메인(포트 포함)일 경우
@@ -10,12 +10,13 @@ export async function apiGetLoginStatus() {
             method: "GET",
             credentials: "include"
         }).then((res) => res.json());
+        /* 세션 ID가 없으면 서버에서 result : false, user : null 응답으로
+        로그인되지 않았음을 알 수 있음 */
     }catch(error) {
         console.log(error);
     };
 };
-/* 세션 ID가 없으면 서버에서 result : false, user : null 응답을 보내기 때문에, 
-로그인되지 않았음을 알 수 있음 */
+
 // 로그인
 export async function apiPostLogin(data) {
     try {
