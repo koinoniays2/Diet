@@ -11,7 +11,7 @@ export default function FooterMenu({ index, activeMenu,
     baseColor }) {
     const ICON_CONTAINER = `flex-1 flex flex-col items-center justify-center py-2 cursor-pointer`;
 
-    // 설정 메뉴 데이터
+    // 환경설정 메뉴 클릭 시 데이터
     const menus = [
         {
             color: [
@@ -26,7 +26,7 @@ export default function FooterMenu({ index, activeMenu,
         }
     ]
 
-    // 쿠키 저장
+    // 색상 변경 클릭 시 쿠키에 인덱스 저장(배경 색, 폴더 색 변경을 위해)
     const ConfigMenuClick = (index) => {
         menus.forEach((item) => {
             item.color.forEach((_, menuIndex) => {
@@ -35,7 +35,7 @@ export default function FooterMenu({ index, activeMenu,
                     setFolderIconColor(getFolderColor(index)); // 폴더색
                     setOpenFolderIconColor(getOpenFolderColor(index)) // 열린 폴더
 
-                    // 변경 컬러 인덱스 쿠키에 저장 js-cookie
+                    // 컬러 인덱스 쿠키에 저장 js-cookie
                     Cookies.set("BaseIndex", index);
 
                 }
@@ -43,19 +43,19 @@ export default function FooterMenu({ index, activeMenu,
         });
     };
     return (
-        // 전체 메뉴
+        // 전체 메뉴 틀(새폴더, 폴더삭제, 환경설정)
         <li className={`${ICON_CONTAINER} ${divCSS} relative ${baseColor}`} onClick={onClick}>
-            {/* 환경설정 클릭 시 나오는 메뉴 / index가 2인 FooterMenu 메뉴에서만 렌더링*/}
+            {/* index가 2(환경설정)이고 활성화 된 인덱스 번호와 같으면 색상 메뉴 랜더링 */}
             <AnimatePresence>
             {index === 2 && activeMenu === index && (
                 <motion.ul 
-                initial={{ y: 70, opacity: 1 }}      // 시작 상태: 아래에서 위로 슬라이드
+                initial={{ y: 80, opacity: 0 }}      // 시작 상태: 아래에서 위로 슬라이드
                 animate={{ y: 0, opacity: 1 }}       // 보여질 때: 위로 슬라이드, 불투명도 증가
                 exit={{ y: 80, opacity: 0 }}         // 사라질 때: 아래로 슬라이드
                 transition={{ duration: 0.5 }}       // 애니메이션 지속 시간
                 className={`absolute bottom-full right-0 w-full border-custom-1 px-1 -z-10 ${baseColor}`}
-                onClick={(e) => e.stopPropagation()}>
-                    {   // 메뉴 추가
+                onClick={(e) => e.stopPropagation()}> {/* 이벤트 버블링 방지 */}
+                    {   // 환경설정 메뉴 추가
                         menus.map((item) => (
                             item.color.map((menu, index) => (
                                 <ConfigMenu key={index}

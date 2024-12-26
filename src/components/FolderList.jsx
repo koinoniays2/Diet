@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { apiDeleteFolder, apiGetFolder } from '../api';
 import { useEffect, useState } from 'react';
 import MemoModal from './MemoModal';
-import { FadeLoader } from 'react-spinners';
+import { ClipLoader } from 'react-spinners';
 import checkTrue from "../assets/check_true.svg";
 import checkFalse from "../assets/check_false.svg";
 import trash from "../assets/trash.svg";
@@ -11,15 +11,16 @@ import { AnimatePresence, motion } from "framer-motion";
 export default function FolderList({ folderIconColor, openFolderIconColor, baseColor, activeMenu, setActiveMenu }) {
     // 폴더 리스트 불러오기
     const { data, isLoading } = useQuery("getFolder", apiGetFolder);
-    // 폴더 ID
+    // 폴더 아이디 담기(폴더 클릭 시 메모를 불러오기 위해 => MemoModal 컴포넌트로 전달)
     const [folderID, setFolderID] = useState(null);
-    // 폴더 이름
+    // 폴더 제목(폴더 클릭 시 제목을 불러오기 위해 => MemoModal 컴포넌트로 전달 )
     const [folderName, setFolderName] = useState(null);
-    // 폴더 삭제 체크 상태 배열
+    // 폴더 삭제 체크 true/false (상태를 배열로 관리)
     const [checkedItem, setCheckedItem] = useState([]);
+    // 삭제 후 폴더 리스트 리렌더링
     const queryClient = useQueryClient();
 
-    // 폴더 리스트 데이터 로드 시 체크 상태 초기화
+    // 폴더 리스트 데이터 로드 시 삭제 체크 상태 초기화
     useEffect(() => {
         if (data?.data) {
             setCheckedItem(data.data.map(() => false));
@@ -31,7 +32,7 @@ export default function FolderList({ folderIconColor, openFolderIconColor, baseC
             setCheckedItem((prevState) => prevState.map(() => false));
         }
     }, [activeMenu]);
-    // 체크 상태
+    // 폴더 인덱스에 따라 체크 상태 변경
     const checkChange = (index) => {
         setCheckedItem((prevState) => {
             const newState = [...prevState]; // 이전 상태 복사
@@ -42,32 +43,33 @@ export default function FolderList({ folderIconColor, openFolderIconColor, baseC
     // 폴더 삭제 API
     const { mutate, isLoading: isDeleting } = useMutation(apiDeleteFolder, {
         onSuccess: (data) => {
-            queryClient.invalidateQueries("getFolder"); // 폴더 리스트 리프레시
+            queryClient.invalidateQueries("getFolder"); // 폴더 리스트 리랜더링
             setCheckedItem([]); // 체크 상태 초기화
             if (data.result) {
                 setActiveMenu(null);
             }
         },
     });
-    // 삭제 
+    // 삭제 버튼 클릭 시
     const folderDelete = () => {
         const checkedIds = data?.data
             .filter((_, index) => checkedItem[index]) // 체크된 폴더만 필터링
             .map((item) => item._id); // 체크된 폴더의 _id만 추출
         if (checkedIds.length > 0) {
-            mutate(checkedIds); // API 호출
+            mutate(checkedIds); // 폴더 삭제 API 호출
         }
     };
 
     return (
         <>
             <div className="min-h-[calc(100vh-157px)] p-4 flex flex-wrap justify-start content-start gap-8 relative">
+                {/* 폴더 로딩 */}
                 {isLoading ? (
                     <div className="w-full h-full flex justify-center items-center">
-                        <FadeLoader />
+                        <ClipLoader />
                     </div>
                 ) : (
-                    /* 폴더 리스트 */
+                    /* 폴더 리스트 랜더링 */
                     data?.data?.map((item, index) => (
                         <div
                             key={index}
@@ -77,6 +79,7 @@ export default function FolderList({ folderIconColor, openFolderIconColor, baseC
                                 setFolderName(item.folderName);
                             }}
                         >
+                            {/* 메모가 있으면 열린 폴더, 없으면  닫힌 폴더*/}
                             <img src={item.existMemo === 1 ? openFolderIconColor : folderIconColor} alt="folder" className="h-10" />
                             <span>{item.folderName}</span>
                             {
@@ -95,6 +98,7 @@ export default function FolderList({ folderIconColor, openFolderIconColor, baseC
                         </div>
                     ))
                 )}
+                {/* 폴더 삭제 클릭 시 삭제 아이콘 */}
                 <AnimatePresence>
                     {
                         activeMenu === 1 &&
@@ -106,14 +110,15 @@ export default function FolderList({ folderIconColor, openFolderIconColor, baseC
                             className="fixed bottom-24 left-1/2 -translate-x-1/2 cursor-pointer py-4"
                             onClick={folderDelete}>
                             {
-                                isDeleting ? <FadeLoader /> : <img src={trash} alt="trash-icon" />}
+                                isDeleting ? <ClipLoader /> : <img src={trash} alt="trash-icon" />
+                            }
                         </motion.div>
 
                     }
                 </AnimatePresence>
             </div>
             {
-                // 폴더 클릭 시 메모 모달
+                // 폴더 클릭 시 메모 모달 오픈
                 folderID &&
                 <section className="w-full h-full p-8 absolute top-0 left-0 bg-black bg-opacity-50 z-10">
                     <MemoModal folderID={folderID} folderName={folderName} setFolderID={setFolderID} setFolderName={setFolderName} baseColor={baseColor} />

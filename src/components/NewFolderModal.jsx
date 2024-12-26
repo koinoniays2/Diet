@@ -10,11 +10,10 @@ import { AnimatePresence, motion } from "framer-motion";
 
 export default function NewFolderModal({ setOpenModal, setActiveMenu }) {
     const { register, handleSubmit } = useForm({ mode: "onChange" });
-    const [serverMessage, setServerMessage] = useState(null); // 서버 메세지
-    const onValid = (data) => mutate(data); // 콜백 함수
+    const [serverMessage, setServerMessage] = useState(null); // 서버 메세지 관리
     const queryClient = useQueryClient();
 
-    // API 요청 react query 라이브러리 useMutation 훅
+    // 폴더 생성 API
     const { mutate, isLoading } = useMutation(apiPostCreateFolder, {
         onSuccess: (data) => {
             queryClient.invalidateQueries("getFolder");
@@ -26,12 +25,14 @@ export default function NewFolderModal({ setOpenModal, setActiveMenu }) {
             };
         }
     });
+    const onValid = (data) => mutate(data);
 
     const serverChange = () => {
         setServerMessage(null); // 인풋에 입력값이 들어오면 서버 메세지 초기화
     };
 
     return (
+        // 새폴더 클릭 시 나오는 입력 창
         <AnimatePresence>
         <motion.div 
         initial={{ opacity: 0 }}
